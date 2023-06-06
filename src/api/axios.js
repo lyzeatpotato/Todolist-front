@@ -3,17 +3,17 @@ import QS from "qs";
 //1. 创建新的axios实例，
 const service = axios.create({
     // // 公共接口
-    // baseURL: 'http://106.54.189.213:60017/',
+    baseURL: '/api/shuhistorytest', // url = base url + request url
     // 超时时间 单位是ms，这里设置了3s的超时时间
     timeout: 3 * 1000
   })
 
 service.interceptors.request.use(config => {
-  config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-  //  if (localStorage.getItem('user_token')) {
-  //   config.headers.token = localStorage.getItem('user_token');
-  //  }
-    config.headers.token = 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwic3ViIjoicm9vdCIsImlzcyI6IndzZyIsImlhdCI6MTY4NDQ4NjExOSwiZXhwIjoxNjg3MDc4MTE5fQ.4esZYgiihn5bpD8rkG4_RH0e0bu2nTiRk-aQdQ76F5c';
+  // config.headers.post['Content-Type'] = 'multipart/form-data' ;
+  // //  if (localStorage.getItem('user_token')) {
+  // //   config.headers.token = localStorage.getItem('user_token');
+  // //  }
+  //   config.headers.token = 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwic3ViIjoicm9vdCIsImlzcyI6IndzZyIsImlhdCI6MTY4NDQ4NjExOSwiZXhwIjoxNjg3MDc4MTE5fQ.4esZYgiihn5bpD8rkG4_RH0e0bu2nTiRk-aQdQ76F5c';
     return config;
   },error => {
     console.log(error)

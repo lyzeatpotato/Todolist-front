@@ -4,100 +4,104 @@
       <nav-header :moduleName="moduleName"></nav-header>
     </div>
     <div class="content">
-      <div class="figure">
-        <div class="table-box">
-          <van-row class="th-row">
-            <van-col
-              :span="24 / dataList.title.length"
-              v-for="warn in dataList.title"
-              :key="warn"
-            >
-              {{ warn }}
-            </van-col>
-          </van-row>
-          <van-row
-            class="tb-row"
-            v-for="(wb, index) in dataList.tbData"
-            :key="index"
-            :style="{ background: index % 2 === 0 ? '#fff' : '#F4F9FE' }"
-          >
-            <van-col>{{wb.name}}</van-col>
-            <van-col>{{wb.story}}</van-col>
-          </van-row>
+      <van-form @failed="onFailed">
+        <van-cell-group inset>
+          <!-- 通过 pattern 进行正则校验 -->
+          <van-field v-model="figurename" label="标题" name="pattern" placeholder="请给这件todo事情取个名字吧~"
+            :rules="[{ pattern, message: '请输入正确内容' }]" />
+          <van-field v-model="title" label="地点" name="pattern" placeholder="请写写我们将在哪里完成这件事~"
+            :rules="[{ pattern, message: '请输入正确内容' }]" />
+          <van-field v-model="story" label="描述" name="pattern" placeholder="请给这件事情留些想说的话吧~"
+            :rules="[{ pattern, message: '请输入正确内容' }]" />
+          <van-field name="uploader" label="上传图片">
+            <template #input>
+              <van-uploader v-model="fileList" reupload />
+            </template>
+          </van-field>
+        </van-cell-group>
+        <div style="margin: 16px;">
+          <van-button round block type="primary" native-type="submit">
+            确认修改To-Do事件
+          </van-button>
         </div>
+      </van-form>
 
-        <!-- 弹出省略的内容 -->
-        <van-popup v-model="showPopup" class="hidden-wrap">
-          <van-row class="hidden-content">{{ ellContent }}</van-row>
-        </van-popup>
-      </div>
     </div>
 
     <div class="bottom">
-      <img class="imgb" src="..//assets//figurepage//bottom@2x.png" alt="" />
+      <img class="imgb" src="..//assets//figurepage//bottom@2x.png" alt="">
     </div>
   </div>
 </template>
 
 <script>
-import NavHeader from "@/components/NavHeader.vue";
+import NavHeader from '@/components/NavHeader.vue'
+import { ref } from 'vue';
 
 export default {
-  name: "FigurePage",
+  name: 'FigurePage',
   components: { NavHeader },
+  props: {
+  },
+  setup() {
+    const fileList = ref([
+    ]);
+
+    return { fileList };
+  },
+  created() {
+    this.figurename = this.$route.params.figurename
+    this.title = this.$route.params.title
+    this.avatar = this.$route.params.avatar
+    this.introduction = this.$route.params.introduction
+    this.story = this.$route.params.story
+    console.log(this.fileList)
+
+    // let obj = {
+    //   content: `data:image/png;base64,${btoa(
+    //     new Uint8Array(this.avatar).reduce(
+    //       (data, byte) => data + String.fromCharCode(byte),
+    //       '',
+    //     ),
+    //   )}`,
+    //   sort: item.sort,
+    // }
+    this.fileList.push({url: this.avatar})
+
+  },
   data() {
     return {
-      showPopup: false, // 显示省略的内容
-      ellContent: "", // 省略的内容
-      costName: "",
-      dataList: {
-        title: ["事件", "描述", "状态"],
-        tbData: [
-          { depart: "皇城司", name: "千帆", age: "23" },
-          { depart: "商铺", name: "池衙内", age: "45" },
-          { depart: "琵琶行", name: "引章", age: "12" },
-        ],
-      },
+      isShow: false,
+      figurename: "",
+      title: "",
+      avatar: "",
+      introduction: "1",
+      story: "1",
     };
-  },
-  props: {},
-  created() {
-    this.$axios.get("/api/shuhistorytest/figure/listspecial").then((res) => {
-      console.log(res);
-      this.dataList.tbData = res;
-    });
   },
   computed: {
     introductionP() {
-      let introductionP = this.introduction.split("\r\n");
+      let introductionP = this.introduction.split('\r\n');
       return introductionP;
     },
     storyP() {
-      let storyP = this.story.split("\r\n");
+      let storyP = this.story.split('\r\n');
       return storyP;
-    },
+    }
+
   },
   methods: {
     shownav: function () {
-      this.isShow = ~this.isShow;
+      this.isShow = ~this.isShow
     },
     returnHome: function () {
-      this.$router.push({ name: "HomePage" });
+      this.$router.push({ name: 'HomePage' })
     },
     returnFigure: function () {
-      this.$router.push({ name: "FigurePage" });
+      this.$router.push({ name: 'FigurePage' })
     },
-    // 显示省略的内容
-    showContent(content) {
-      if (content == "") {
-        return;
-      } else {
-        this.ellContent = content;
-        this.showPopup = true;
-      }
-    },
-  },
-};
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -131,43 +135,14 @@ export default {
 
 .figure {
   position: relative;
-  top: 5%;
   margin: 0 auto;
-  width: 89%;
-  height: 90%;
-  max-height: 440px;
-  overflow: scroll;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 25px;
-  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
-}
-
-.table-box {
-  margin: 12px 0px;
-}
-.th-row {
-  height: 56px;
-  line-height: 56px;
-  background: #ebf1f7;
-  padding: 0px 12px;
-}
-.tb-row {
-  height: 56px;
-  line-height: 56px;
-  padding: 0px 12px;
-}
-.hidden-wrap {
-  width: 66vw;
-  text-align: start;
-  border-radius: 10px;
-}
-.hidden-content {
-  padding: 20px;
-  word-break: break-all;
-  overflow: hidden;
+  width: 88%;
+  height: 100%;
+  Border-radius: 10px;
+  /* display: flex;
+    justify-content:flex-end;
+    align-items:flex-end; */
+  background-color: white;
 }
 
 .shangdabainian {
@@ -193,37 +168,42 @@ export default {
   width: 16%;
   height: 44px;
 }
+
 .fig-header img {
   width: 100%;
   height: 100%;
   border-radius: 40px;
 }
+
 .name {
   margin-left: 4px;
   margin-top: 14px;
   width: 18%;
   height: 30px;
-  color: #1e364e;
+  color: #1E364E;
 }
+
 .title {
   margin-left: 8px;
   margin-top: 14px;
   width: 60%;
   height: 30px;
-  color: #1e364e;
+  color: #1E364E;
 }
 
 .icon {
   margin-top: 14px;
   height: 30px;
-  color: #1e364e;
+  color: #1E364E;
 }
+
 .return {
   margin-left: 4%;
   margin-top: 16px;
   width: 6%;
   height: 30px;
 }
+
 .return button {
   width: 80%;
   height: 14px;
@@ -232,20 +212,24 @@ export default {
   background: url("..//assets//figurepage//delete@3x.png") no-repeat;
   background-size: 100% 100%;
 }
+
 .fig-content {
   width: 100%;
   height: 90%;
   margin-top: 16px;
 }
+
 .video-content {
   width: 80%;
   height: 32%;
   margin: 0 auto;
 }
+
 #video {
   width: 100%;
   height: 100%;
 }
+
 .ziti-content {
   position: absolute;
   height: 58%;
@@ -254,8 +238,9 @@ export default {
   z-index: 2;
   /* white-space: pre-line; */
 }
+
 .ziti-content::-webkit-scrollbar {
-  display: none;
+  display: none
 }
 
 .intro-title {
@@ -267,12 +252,14 @@ export default {
   display: flex;
   margin-top: 6px;
 }
+
 .ziti-content h1 {
-  color: #1e364e;
+  color: #1E364E;
   font-family: 华文楷体;
   margin-left: 8px;
   font-size: 18px;
 }
+
 .ziti-content p {
   margin: 3px 7%;
   font-size: 14px;
@@ -284,8 +271,8 @@ export default {
   height: 12%;
   bottom: 0;
 }
+
 .bottom .imgb {
   width: 100%;
   height: 100%;
-}
-</style>
+}</style>

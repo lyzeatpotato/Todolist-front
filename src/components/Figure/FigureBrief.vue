@@ -14,9 +14,9 @@
       <div class="introf">
         <p>{{story}}</p>
       </div>
-      <!-- <div>
-        <button class="btn-detail" @click="showDetail()">查看更多→</button>
-      </div> -->
+      <div>
+        <button class="btn-detail" @click="showDetail()">修改信息→</button>
+      </div>
   </div>
 </template>
 
@@ -116,8 +116,7 @@ export default {
 	overflow: hidden;
 }
 
-.btn-detail:active{
-    color:red;
+.btn-detail{
     background-color: transparent;
 }
 </style>

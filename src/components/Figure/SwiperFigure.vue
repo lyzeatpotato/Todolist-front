@@ -31,7 +31,7 @@ export default {
     mounted(){
         setInterval(()=>{
             if(++this.activeIndex >=this.figures.length)  this.activeIndex=0
-        },2000)
+        },5000)
     },
     methods:{
         left(){

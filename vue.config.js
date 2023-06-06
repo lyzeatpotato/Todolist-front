@@ -19,8 +19,8 @@ module.exports = {
     /* 使用代理 */
     proxy: {
       '/api': {
-        target: 'http://101.132.110.63:60017/',
-        // target: 'http://localhost:60017/', 
+        // target: 'http://101.132.110.63:60017/',
+        target: 'http://localhost:60017/', 
         ws: true, // websockets
         changeOrigin: true,  // needed for virtual hosted sites
         pathRewrite: {

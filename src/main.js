@@ -2,7 +2,7 @@ import { createApp } from "vue";
 
 import router from "./router";
 import store from "./store";
-import { TreeSelect, Tab, Tabs, Swipe, SwipeItem, Toast, RadioGroup, Radio, Stepper, Icon, Notify } from "vant";
+import { TreeSelect, Tab, Tabs, Swipe, SwipeItem, Toast, RadioGroup, Radio, Stepper, Icon, Notify, Dialog } from "vant";
 import { get, post } from "./api/axios.js";
 import App from "./App.vue";
 import 'vant/lib/index.css'
@@ -21,6 +21,7 @@ app
   .use(SwipeItem)
   .use(Toast)
   .use(Notify)
+  .use(Dialog)
   .use(RadioGroup)
   .use(Radio)
   .use(Stepper)
